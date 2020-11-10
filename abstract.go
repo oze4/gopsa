@@ -47,7 +47,7 @@ type SetList struct {
 // Set is a collection of cards, eg: `Pokemon Fossil (1st Edition)`
 type Set int
 
-// Identifier gets the PSA set identifier for a pokemon set
+// Identifier gets the PSA set identifier for a set
 func (s *Set) Identifier() (string, error) {
 	switch *s {
 	case SetOriginal:
