@@ -40,7 +40,7 @@ func copyAndCloseBody(r io.ReadCloser) ([]byte, error) {
 
 // Creates POST request body for a given Set
 func newRequestForm(s Set) (*requestForm, error) {
-	id, err := s.ID()
+	id, err := s.Identifier()
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func readGetSetListResponse(r io.ReadCloser) (SetList, error) {
 					// as the card ID
 					hrefStrArr := strings.Split(t.Attr[i].Val, "/")
 					index := len(hrefStrArr) - 1
-					card.psaIdentifier = hrefStrArr[index]
+					card.identifier = hrefStrArr[index]
 					// Break out of our loop by making `i` equal to `N < len(t.Attr)`
 					i = len(t.Attr)
 				}

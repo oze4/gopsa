@@ -17,22 +17,22 @@ const (
 	SetJungle
 )
 
-// Card represents a PSA set
+// Card represents a PSA card
 type Card struct {
-	Number        string `json:"CardNumber,omitempty"`
-	RawName       string `json:"CardName,omitempty"`
-	name          string
-	psaIdentifier string
+	Number     string `json:"CardNumber,omitempty"`
+	RawName    string `json:"CardName,omitempty"`
+	name       string
+	identifier string
 }
 
-// Name returns the name of the Set
+// Name returns the name of the Card
 func (c *Card) Name() string {
 	return c.name
 }
 
-// PSAIdentifier returns the identifier for a given Set, which is used in the URL for queries
-func (c *Card) PSAIdentifier() string {
-	return c.psaIdentifier
+// Identifier returns the identifier (which is used for crafting queries)
+func (c *Card) Identifier() string {
+	return c.identifier
 }
 
 // SetList holds a pokemon set card list
@@ -44,12 +44,11 @@ type SetList struct {
 	Data              []*Card `json:"data,omitempty"`
 }
 
-// Set is the setID used in http requests (helps build URL, etc)
-// A 'Set' is a collection of cards, eg: `Pokemon Fossil (1st Edition)`
+// Set is a collection of cards, eg: `Pokemon Fossil (1st Edition)`
 type Set int
 
-// ID gets the PSA set identifier for a pokemon set
-func (s *Set) ID() (string, error) {
+// Identifier gets the PSA set identifier for a pokemon set
+func (s *Set) Identifier() (string, error) {
 	switch *s {
 	case SetOriginal:
 		return "29137", nil
@@ -58,7 +57,7 @@ func (s *Set) ID() (string, error) {
 	case SetJungle:
 		return "", errors.New("Not implemented")
 	default:
-		return "", errors.New("Invalid Set ID")
+		return "", errors.New("Invalid Set Identifier")
 	}
 }
 
@@ -72,7 +71,7 @@ func (s *Set) Name() (string, error) {
 	}
 }
 
-// Used as request body
+// Form we use to POST
 type requestForm struct {
 	Draw         string
 	Start        string
@@ -87,6 +86,5 @@ func (r *requestForm) ToRequestBody() (io.Reader, error) {
 	if e != nil {
 		return nil, e
 	}
-
 	return bytes.NewBuffer(b), nil
 }
